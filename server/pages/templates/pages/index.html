@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Bank Transfer</title>
+        <style>
+        table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+        }
+
+        td, th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+        }
+
+        tr:nth-child(even) {
+        background-color: #dddddd;
+        }
+        </style>
+    </head>
+
+
+    <body>
+        {%if staff == 0%}
+        <h1>Your Bike(s)</h1>
+        <form method="GET">
+            <table>
+            <tr>
+                <th>Model</th>
+                <th>ID</th>
+                <th>Notes</th>
+                <th>Status</th>
+            </tr>
+            {% for bike in bikes2%}
+            <tr>
+                <th> {{bike.0.model}}</th>
+                <th>{{bike.0.id}}</th>
+                <th>
+                    {% if bike.0.status == 1 %}
+                    <p>Ready</p>
+                    {% else %}
+                    <p>No ready</p>
+                    {% endif %}
+                </th>
+                <th>
+                    <ul>
+                    {% for n in bike.1 %}
+                    <li style="text-align:left">{{n.note}}</li>
+                    {% endfor %}
+                    </ul>
+                </th>
+            </tr>
+            {% endfor %}
+            </table>
+            
+        </form>
+		
+        <table>
+		
+		</table>
+        {% else %}
+        <h1>Staff view</h1>
+        
+        
+        <br/>
+        <button onclick="myFunction()">Try it</button>
+        <p>Q</p>
+        {% comment %} <div id="noready">
+        <form method="GET">
+            <table>
+            <tr>
+                <th>Model</th>
+                <th>ID</th>
+                <th>Status</th>
+                <th>Notes</th>
+            </tr>
+            {% for bike in bikes2%}
+            <tr>
+                <th> {{bike.0.model}}</th>
+                <th>{{bike.0.id}}</th>
+                <th>
+                    {% if bike.0.status == 1 %}
+                    <p>Ready</p>
+                    {% else %}
+                    <p>No ready</p>
+                    {% endif %}
+                </th>
+                <th>
+                    <ul>
+                    {% for n in bike.1 %}
+                    <li style="text-align:left">{{n.note}}</li>
+                    {% endfor %}
+                    </ul>
+                </th>
+            </tr>
+            {% endfor %}
+            </table>
+            
+        </form> {% endcomment %}
+        </div>
+        <div id="allbikes">
+        <form method="GET">
+            <table>
+            <tr>
+                <th>Model</th>
+                <th>ID</th>
+                <th>Status</th>
+                <th>Notes</th>
+            </tr>
+            {% for bike in all_bikes%}
+            <tr>
+                <th> {{bike.0.model}}</th>
+                <th>{{bike.0.id}}</th>
+                <th>
+                    {% if bike.0.status == 1 %}
+                    <p>Ready</p>
+                    {% else %}
+                    <p>No ready</p>
+                    {% endif %}
+                </th>
+                <th>
+                    <ul>
+                    {% for n in bike.1 %}
+                    <li style="text-align:left">{{n.note}}</li>
+                    {% endfor %}
+                    </ul>
+                </th>
+            </tr>
+            {% endfor %}
+            </table>
+            
+        </form>
+        </div>
+        <form action='edit/' method="POST">
+            {% csrf_token %} 
+            {% comment %} POST ja csrf on parempi kuin GET {% endcomment %}
+            
+            {% comment %} <select name="to">
+			{% for account in accounts %}
+                <option value="{{account.user.username}}">{{account.user.username}}</option>
+			{% endfor %}
+            </select><br/> {% endcomment %}
+            <span>Add note</span><br/>
+            
+            <input type="number" name="bike", value=""/> Bike<br/>
+            <input type="text" name="note"/> Notes <br/>
+            <input type="text" name="writer", value="{{user.username}}"/> Writer <br/>
+            <input type="date",name="date" value='',min="2019-01-01T00:00" max="2022-12-30T00:00"><br/>
+
+            <p>Ready</p>
+            <input type="radio" name="status" value="1"> Yes<br>
+            <input type="radio" name="status" value="0"> No<br>
+
+            <input type="submit" value="Submit"/>
+            
+        </form>
+        </br>
+        <p>Add bike</p>
+        <form action='newbike/' method="POST">
+            {% csrf_token %}
+            <input type="text" name="model"/> Model <br/>
+            <input type="text" name="notes"/> Notes <br/>
+            <input type="text" name="writer", value="{{user.username}}"/> Writer <br/>
+            <select name="owner">
+            {% for account in accounts %}
+                <option value="{{account.user.username}}">{{account.user.username}}</option>
+			{% endfor %}
+            </select>Owner<br/>
+            <input type="radio" name="status" value="1"> Yes<br>
+            <input type="radio" name="status" value="0"> No<br>
+            <input type="submit" value="Submit"/>
+        </form>
+
+        {% endif %}
+        
+        <br/>
+        <form action='logout/' method="POST">
+			{% csrf_token %}
+            <input type="submit" value="Logout"/>
+        </form>
+
+        <script>
+        function myFunction() {
+        var x = document.getElementById("noready");
+        var y = document.getElementById("allbikes");
+        if (x.style.display === "none") {
+            x.style.display = "block";
+            y.style.display = "none";
+        } else {
+            x.style.display = "none";
+            y.style.display = "block";
+        }
+        }
+        </script>
+        </body>
+    </html>
