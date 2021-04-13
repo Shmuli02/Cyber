@@ -66,11 +66,11 @@ def adduserView(request):
 		name = request.POST.get('name')
 		pw = request.POST.get('password')
 		a = User.objects.filter(username=name).count()
-		a = User.objects.get_or_create(is_superuser=0,username=name,password=pw,is_staff=0,is_active=1,date_joined='2020-07-03') #save raw password to db
-		# if a == 0:
-		# 	newuser = User(is_superuser=0,username=name,is_staff=0,is_active=1,date_joined=datetime.datetime.now())
-		# 	newuser.set_password(pw)
-		# 	newuser.save()
-		# 	Account.objects.create(balance=0,dob='2002-01-01',user_id=newuser.pk) # save password to db encrypted
+		# a = User.objects.get_or_create(is_superuser=0,username=name,password=pw,is_staff=0,is_active=1,date_joined='2020-07-03') #save raw password to db
+		if a == 0:
+			newuser = User(is_superuser=0,username=name,is_staff=0,is_active=1,date_joined=datetime.datetime.now())
+			newuser.set_password(pw)
+			newuser.save()
+			Account.objects.create(balance=0,dob='2002-01-01',user_id=newuser.pk) # save password to db encrypted
 	accounts = Account.objects.all()
 	return redirect('/')

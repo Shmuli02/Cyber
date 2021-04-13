@@ -63,11 +63,10 @@
         {% else %}
         <h1>Staff view</h1>
         
-        
         <br/>
-        <button onclick="myFunction()">Try it</button>
-        <p>Q</p>
-        {% comment %} <div id="noready">
+        <button onclick="myFunction()">Edit view</button>
+        <p id="p1"></p>
+        <div id="noready">
         <form method="GET">
             <table>
             <tr>
@@ -98,7 +97,7 @@
             {% endfor %}
             </table>
             
-        </form> {% endcomment %}
+        </form>
         </div>
         <div id="allbikes">
         <form method="GET">
@@ -133,15 +132,10 @@
             
         </form>
         </div>
+        {% comment %} <form action='edit/' method="GET"> {% endcomment %}
         <form action='edit/' method="POST">
             {% csrf_token %} 
-            {% comment %} POST ja csrf on parempi kuin GET {% endcomment %}
-            
-            {% comment %} <select name="to">
-			{% for account in accounts %}
-                <option value="{{account.user.username}}">{{account.user.username}}</option>
-			{% endfor %}
-            </select><br/> {% endcomment %}
+            {% comment %} POST and  csrf is better than GET {% endcomment %}
             <span>Add note</span><br/>
             
             <input type="number" name="bike", value=""/> Bike<br/>
@@ -149,7 +143,7 @@
             <input type="text" name="writer", value="{{user.username}}"/> Writer <br/>
             <input type="date",name="date" value='',min="2019-01-01T00:00" max="2022-12-30T00:00"><br/>
 
-            <p>Ready</p>
+            <p>Ready?</p>
             <input type="radio" name="status" value="1"> Yes<br>
             <input type="radio" name="status" value="0"> No<br>
 
@@ -168,6 +162,7 @@
                 <option value="{{account.user.username}}">{{account.user.username}}</option>
 			{% endfor %}
             </select>Owner<br/>
+            <p>Ready?</p>
             <input type="radio" name="status" value="1"> Yes<br>
             <input type="radio" name="status" value="0"> No<br>
             <input type="submit" value="Submit"/>
@@ -192,7 +187,13 @@
             x.style.display = "none";
             y.style.display = "block";
         }
+        if (x.style.display == "none"){
+            document.getElementById("p1").innerHTML = "All bikes";
+        } else {
+            document.getElementById("p1").innerHTML = "Not ready bikes";
         }
+        }
+        myFunction()
         </script>
         </body>
     </html>
