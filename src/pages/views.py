@@ -1,3 +1,4 @@
+from django.db import connection
 from django.http import JsonResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
@@ -5,12 +6,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from .models import Account, Bike, Notes
 import datetime
+from django.db import connection
 
-def balanceView(request):
-	if request.user.is_authenticated:
-		return JsonResponse({'username': request.user.username, 'balance': request.user.account.balance, 'dob':request.user.account.dob})
-	else:
-		return JsonResponse({'username': 'anonymous', 'balance': 0})
 
 @login_required
 def homePageView(request):
@@ -36,12 +33,18 @@ def editView(request):
 		bike = request.POST.get('bike')
 		note = request.POST.get('note')
 		writer = request.POST.get('writer')
-		date = request.POST.get('date') #ei toimi
+		date = request.POST.get('date')
 		status = request.POST.get('status')
+		# sql = """
+		# 	INSERT INTO pages_notes (note,writer_id,bike_id,date)
+		# 	VALUES note=%s, writer_id=%s, bike_id=%s, date=%s
+		# 	""" %(note,writer,bike,date)
+
+		# cursor = connection.cursor()
+		# cursor.execute(sql)
 		b = Bike.objects.get(id=bike)
 		b.status = status
 		b.save()
-		print(status)
 		if note != "":
 			Notes.objects.create(note=note,bike=Bike.objects.get(id=bike),writer=User.objects.get(username=writer),date=date)
 	return redirect('/')
